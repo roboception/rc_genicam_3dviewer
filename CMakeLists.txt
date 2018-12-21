@@ -33,6 +33,7 @@ include(cmake/optimization_flags.cmake)
 # - Standard definitions -
 
 add_definitions(-Wall)
+add_definitions(-std=c++11)
 
 # - Build individual parts -
 
