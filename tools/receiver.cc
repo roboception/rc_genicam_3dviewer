@@ -159,6 +159,11 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
     }
   }
 
+  // only get images without projection in exposure alternate mode (this does
+  // not have any effect in other out1_modes)
+
+  rcg::setString(nodemap, "AcquisitionAlternateFilter", "OnlyLow");
+
   // try getting synchronized data (which only has an effect if the device
   // and GenTL producer support multipart)
 
