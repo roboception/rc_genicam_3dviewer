@@ -174,21 +174,21 @@ void GCWorld::onSpecialKey(int key, int x, int y)
       {
         if (key == GLUT_KEY_LEFT)
         {
-          std::vector<std::string> list;
-          std::string value=receiver->getEnum("DepthQuality", list);
-          int i=getIndex(list, value);
+          std::vector<std::string> slist;
+          std::string value=receiver->getEnum("DepthQuality", slist);
+          int i=getIndex(slist, value);
 
           if (i > 0) i--;
-          if (list.size() > 0) receiver->setEnum("DepthQuality", list[i]);
+          if (slist.size() > 0) receiver->setEnum("DepthQuality", slist[i]);
         }
         else if (key == GLUT_KEY_RIGHT)
         {
-          std::vector<std::string> list;
-          std::string value=receiver->getEnum("DepthQuality", list);
-          int i=getIndex(list, value);
+          std::vector<std::string> slist;
+          std::string value=receiver->getEnum("DepthQuality", slist);
+          int i=getIndex(slist, value);
 
-          if (i+1 < static_cast<int>(list.size())) i++;
-          if (list.size() > 0) receiver->setEnum("DepthQuality", list[i]);
+          if (i+1 < static_cast<int>(slist.size())) i++;
+          if (slist.size() > 0) receiver->setEnum("DepthQuality", slist[i]);
         }
 
         // show current setting
@@ -241,21 +241,21 @@ void GCWorld::onSpecialKey(int key, int x, int y)
 
         if (key == GLUT_KEY_LEFT)
         {
-          std::vector<std::string> list;
-          std::string value=receiver->getEnum("LineSource", list);
-          int i=getIndex(list, value);
+          std::vector<std::string> slist;
+          std::string value=receiver->getEnum("LineSource", slist);
+          int i=getIndex(slist, value);
 
           if (i > 0) i--;
-          if (list.size() > 0) receiver->setEnum("LineSource", list[i]);
+          if (slist.size() > 0) receiver->setEnum("LineSource", slist[i]);
         }
         else if (key == GLUT_KEY_RIGHT)
         {
-          std::vector<std::string> list;
-          std::string value=receiver->getEnum("LineSource", list);
-          int i=getIndex(list, value);
+          std::vector<std::string> slist;
+          std::string value=receiver->getEnum("LineSource", slist);
+          int i=getIndex(slist, value);
 
-          if (i+1 < static_cast<int>(list.size())) i++;
-          if (list.size() > 0) receiver->setEnum("LineSource", list[i]);
+          if (i+1 < static_cast<int>(slist.size())) i++;
+          if (slist.size() > 0) receiver->setEnum("LineSource", slist[i]);
         }
 
         // show current setting

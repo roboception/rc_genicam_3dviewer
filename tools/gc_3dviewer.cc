@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
 
     // create window
 
-    gvr::GLInitWindow(-1, -1, 800, 600, "gc_viewer");
+    gvr::GLInitWindow(-1, -1, 800, 600, "gc_3dviewer");
     world=std::make_shared<rcgv::GCWorld>(800, 600, receiver);
 
     // register additional timer callback
@@ -148,15 +148,15 @@ int main(int argc, char *argv[])
   }
   catch (const std::exception &ex)
   {
-    std::cerr << ex.what() << std::endl;
+    gutil::showError(ex.what());
   }
   catch (const GENICAM_NAMESPACE::GenericException &ex)
   {
-    std::cerr << "Exception: " << ex.what() << std::endl;
+    gutil::showError(ex.what());
   }
   catch (...)
   {
-    std::cerr << "Unknown exception!" << std::endl;
+    gutil::showError("Unknown exception!");
   }
 
   rcg::System::clearSystems();

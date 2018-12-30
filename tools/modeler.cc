@@ -99,7 +99,7 @@ void getImage(gimage::ImageU8 &out, const std::shared_ptr<const rcg::Image> &in)
 
   if (in->getPixelFormat() == Mono8)
   {
-    out.setSize(width, height, 1);
+    out.setSize(static_cast<long>(width), static_cast<long>(height), 1);
 
     gutil::uint8 *pt=out.getPtr(0, 0, 0);
 
@@ -115,7 +115,7 @@ void getImage(gimage::ImageU8 &out, const std::shared_ptr<const rcg::Image> &in)
   }
   else if (in->getPixelFormat() == YCbCr411_8)
   {
-    out.setSize(width, height, 3);
+    out.setSize(static_cast<long>(width), static_cast<long>(height), 3);
 
     size_t pstep=(width>>2)*6+px;
 
@@ -143,7 +143,7 @@ void getImage(gimage::ImageU8 &out, const std::shared_ptr<const rcg::Image> &in)
   }
 }
 
-uint32_t getDisp(gimage::ImageFloat &dout, const std::shared_ptr<const rcg::Image> &din,
+int getDisp(gimage::ImageFloat &dout, const std::shared_ptr<const rcg::Image> &din,
                  double inv, double scale, double offset)
 {
   const int iinv=static_cast<int>(inv);
@@ -154,10 +154,10 @@ uint32_t getDisp(gimage::ImageFloat &dout, const std::shared_ptr<const rcg::Imag
   const uint8_t *dps=din->getPixels();
   size_t dstep=din->getWidth()*sizeof(uint16_t)+din->getXPadding();
 
-  dout.setSize(width, height, 1);
+  dout.setSize(static_cast<long>(width), static_cast<long>(height), 1);
   float *dpt=dout.getPtr(0, 0, 0);
 
-  uint32_t ret=0;
+  int ret=0;
   if (din->isBigEndian()) // big endian
   {
     for (size_t k=0; k<height; k++)
@@ -301,7 +301,7 @@ void Modeler::run()
         for (long i=0; i<disp.getWidth(); i++)
         {
           double d=disp.get(i, k);
-          if (disp.isValidS(d))
+          if (disp.isValidS(static_cast<float>(d)))
           {
             gmath::Vector3d P;
 
@@ -318,7 +318,7 @@ void Modeler::run()
             double dx=(i+0.5-w2)*s-P[0];
             double dy=(k+0.5-h2)*s-P[1];
 
-            mesh->setScanSize(n, 2*std::sqrt(dx*dx+dy*dy));
+            mesh->setScanSize(n, static_cast<float>(2*std::sqrt(dx*dx+dy*dy)));
 
             double dz=P[2]-f*msg->t/(d+0.5);
 
@@ -365,8 +365,8 @@ void Modeler::run()
 
       // create triangles
 
-      std::vector<int> line0(disp.getWidth());
-      std::vector<int> line1(disp.getWidth());
+      std::vector<int> line0(static_cast<unsigned int>(disp.getWidth()));
+      std::vector<int> line1(static_cast<unsigned int>(disp.getWidth()));
       std::vector<int> *l0=&line0;
       std::vector<int> *l1=&line1;
 
@@ -402,7 +402,7 @@ void Modeler::run()
           float dmax=-std::numeric_limits<float>::max();
           int   valid=0;
 
-          l1->at(i)=-1;
+          l1->at(static_cast<unsigned int>(i))=-1;
 
           if (disp.isValid(i, k))
           {
@@ -425,38 +425,38 @@ void Modeler::run()
           if (valid >= 3 && dmax-dmin <= dstep)
           {
             int j=0;
-            int f[4];
+            int ff[4];
 
             if (l0->at(i-1) >= 0)
             {
-              f[j++]=l0->at(i-1);
+              ff[j++]=l0->at(i-1);
             }
 
             if (l1->at(i-1) >= 0)
             {
-              f[j++]=l1->at(i-1);
+              ff[j++]=l1->at(i-1);
             }
 
             if (l1->at(i) >= 0)
             {
-              f[j++]=l1->at(i);
+              ff[j++]=l1->at(i);
             }
 
             if (l0->at(i) >= 0)
             {
-              f[j++]=l0->at(i);
+              ff[j++]=l0->at(i);
             }
 
-            mesh->setTriangleIndex(tn, 0, f[0]);
-            mesh->setTriangleIndex(tn, 1, f[1]);
-            mesh->setTriangleIndex(tn, 2, f[2]);
+            mesh->setTriangleIndex(tn, 0, ff[0]);
+            mesh->setTriangleIndex(tn, 1, ff[1]);
+            mesh->setTriangleIndex(tn, 2, ff[2]);
             tn++;
 
             if (j == 4)
             {
-              mesh->setTriangleIndex(tn, 0, f[2]);
-              mesh->setTriangleIndex(tn, 1, f[3]);
-              mesh->setTriangleIndex(tn, 2, f[0]);
+              mesh->setTriangleIndex(tn, 0, ff[2]);
+              mesh->setTriangleIndex(tn, 1, ff[3]);
+              mesh->setTriangleIndex(tn, 2, ff[0]);
               tn++;
             }
           }
