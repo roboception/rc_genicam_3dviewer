@@ -121,9 +121,8 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
   {
     rcg::setEnum(nodemap, "LineSelector", "Out1", true);
     std::string linesource=rcg::getEnum(nodemap, "LineSource", true);
-    std::string filter=rcg::getEnum(nodemap, "AcquisitionAlternateFilter", true);
 
-    if (linesource == "ExposureAlternateActive" && filter == "OnlyLow")
+    if (linesource == "ExposureAlternateActive")
     {
       tol=50*1000*1000; // set tolerance to 50 ms
     }
@@ -275,6 +274,21 @@ void Receiver::setEnum(const char *name, const std::string &value)
   if (nodemap)
   {
     rcg::setEnum(nodemap, name, value.c_str());
+
+    // switch timestamp tolerance if switching between exposure alternate and
+    // other modes
+
+    if (std::string(name) == "LineSource")
+    {
+      if (value == "ExposureAlternateActive")
+      {
+        tol=50*1000*1000; // set tolerance to 50 ms
+      }
+      else
+      {
+        tol=0;
+      }
+    }
   }
 }
 
