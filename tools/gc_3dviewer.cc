@@ -64,6 +64,9 @@ void printHelp(const char *prgname)
   std::cout << "Requests synchronized intensity and disparity images, creates a colored mesh" << std::endl;
   std::cout << "and shows it in an OpenGL window." << std::endl;
   std::cout << std::endl;
+  std::cout << "- Press 'h' for an overview of general key codes." << std::endl;
+  std::cout << "- Use cursor keys to switch between some GenICam parameters and their values." << std::endl;
+  std::cout << std::endl;
   std::cout << "<device-id> Device from which images will taken. It can be ommitted if there" << std::endl;
   std::cout << "is only one device available." << std::endl;
 }
