@@ -1,3 +1,10 @@
+1.0.2 (2018-01-08)
+------------------
+
+- Included short hint about key codes in help text of tool
+- Fixed synchronization bug when switching between exposure alternate and other modes
+- Some fixes for compiling in Visual Studio under Windows
+
 1.0.1 (2018-12-21)
 ------------------
 
