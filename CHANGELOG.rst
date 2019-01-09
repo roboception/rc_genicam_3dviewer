@@ -1,4 +1,10 @@
-1.0.2 (2018-01-08)
+1.0.3 (2019-01-09)
+------------------
+
+- Fixed prefix of capture image file
+- Improved readme
+
+1.0.2 (2019-01-08)
 ------------------
 
 - Included short hint about key codes in help text of tool
