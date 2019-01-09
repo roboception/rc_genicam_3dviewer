@@ -135,6 +135,7 @@ int main(int argc, char *argv[])
 
     gvr::GLInitWindow(-1, -1, 800, 600, "gc_3dviewer");
     world=std::make_shared<rcgv::GCWorld>(800, 600, receiver);
+    world->setCapturePrefix("capture");
 
     // register additional timer callback
 
