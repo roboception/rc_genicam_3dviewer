@@ -1,5 +1,5 @@
 /*
- * This file is part of the rc_genicam_viewer package.
+ * This file is part of the rc_genicam_3dviewer package.
  *
  * Copyright (c) 2018 Roboception GmbH
  * All rights reserved
