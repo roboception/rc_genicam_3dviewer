@@ -9,8 +9,8 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 # - Find manditory package cvkit -
 
-find_package(CVKIT 1.9.0 REQUIRED)
-find_package(RC_GENICAM_API 2.0.0 REQUIRED)
+find_package(CVKIT 1.9.14 REQUIRED)
+find_package(RC_GENICAM_API 2.0.3 REQUIRED)
 
 include_directories(${CVKIT_INCLUDE_DIRS})
 include_directories(${RC_GENICAM_API_INCLUDE_DIRS})
@@ -104,6 +104,6 @@ add_subdirectory(doc)
 #set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Your Name <your.name@roboception.de>")
 
 # optionally specify dependencies of the debian package here (comma separated!)
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "cvkit (>= 1.9.0), rc-genicam-api (>= 2.0.0)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "cvkit (>= 1.9.14), rc-genicam-api (>= 2.0.3) | ros-$ENV{ROS_DISTRO}-rc-genicam-api (>= 2.0.3)")
 
 include(cmake/package_debian.cmake)
