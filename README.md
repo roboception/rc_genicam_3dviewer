@@ -5,6 +5,8 @@ This package provides the gc_3dviewer tool for live viewing the 3D data of an
 [rc_visard from Roboception GmbH](https://roboception.com/en/rc_visard-en/) via
 the GenICam interface.
 
+![gc_3dviewer gif](doc/gc_3dviewer.gif)
+
 Usage
 -----
 
