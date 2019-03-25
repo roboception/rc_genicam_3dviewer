@@ -94,7 +94,9 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
   // get chunk adapter (this switches chunk mode on if possible and
   // returns a null pointer if this is not possible)
 
-  chunkadapter=rcg::getChunkAdapter(nodemap, dev->getTLType());
+// ??? disabling chunk data
+//  chunkadapter=rcg::getChunkAdapter(nodemap, dev->getTLType());
+rcg::setBoolean(nodemap, "ChunkModeActive", false);
 
   // get focal length, baseline and disparity scale factor
 
