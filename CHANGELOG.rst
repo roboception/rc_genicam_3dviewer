@@ -1,3 +1,10 @@
+1.0.4 (2019-06-19)
+------------------
+
+- Request receiving images individually (i.e. not synchronized) to avoid not getting
+  buffers in alternate exposure active mode
+- Improved readme
+
 1.0.3 (2019-01-09)
 ------------------
 
