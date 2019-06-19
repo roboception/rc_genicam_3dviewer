@@ -166,7 +166,7 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
   // try getting synchronized data (which only has an effect if the device
   // and GenTL producer support multipart)
 
-  rcg::setString(nodemap, "AcquisitionMultiPartMode", "SynchronizedComponents");
+  rcg::setString(nodemap, "AcquisitionMultiPartMode", "SingleComponent");
 
   // start background thread for streaming images
 
