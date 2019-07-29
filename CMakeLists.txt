@@ -9,8 +9,8 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 # - Find manditory package cvkit -
 
-find_package(CVKIT 1.9.14 REQUIRED)
-find_package(RC_GENICAM_API 2.0.3 REQUIRED)
+find_package(CVKIT 2.0.3 REQUIRED)
+find_package(RC_GENICAM_API 2.2.3 REQUIRED)
 
 include_directories(${CVKIT_INCLUDE_DIRS})
 include_directories(${RC_GENICAM_API_INCLUDE_DIRS})
@@ -52,6 +52,7 @@ if (MSVC)
   add_definitions("/wd4668")
   add_definitions("/wd4127")
   add_definitions("/wd4265")
+  add_definitions("/wd4623")
   add_definitions("/wd4996")
   add_definitions("/wd4437")
   add_definitions("/wd4571")

@@ -43,7 +43,7 @@ The packages and their dependencies can be found here:
 * https://github.com/roboception/rc_genicam_api/releases
 * https://github.com/roboception/cvkit/releases
 
-### Building from source code
+### Building from source code under Linux
 
 The gc_3dviewer tool is based on [rc_genicam_api](https://github.com/roboception/rc_genicam_api)
 and [cvkit](https://github.com/roboception/cvkit).
@@ -58,6 +58,40 @@ cmake ..
 make
 make install
 ```
+
+### Building from source under Windows using Visual Studio
+
+It is assumed that Visual Studio is installed.
+
+Compile and install 'cvkit' with GLEW and GLUT as described in the cvkit
+package. Compile and install 'rc_genicam_api' in the same way or download
+it pre-compiled from github.
+
+NOTE: It is best to install all packages into the same  directory for
+resolving dependency at build- and runtime.
+
+Building rc_genicam_3dviewer:
+
+- Start cmake-gui
+- Select the rc_genicam_3dviewer source directory as source code path
+- Copy the source code path to build the binaries and add /build to the
+  path
+- Click 'Configure', confirm creating the build directory
+- Select the appropriate Visual Studio version (e.g. 'Visual Studio 14
+  2015 Win64'), select 'Use default native compilers' and click 'Finish'
+- You will get an error because cmake was not able to find cvkit and
+  rc_genicam_api
+- Search for the key name 'CMAKE_INSTALL_PREFIX' and change the value to
+  the install path for cvkit and rc_genicam_api
+- Select 'Advanced' and add to CMAKE_EXE_LINKER_FLAGS the directory for
+  finding the GLEW and GLUT libs as '/LIBPATH:<alsolute-path-to-lib>'.
+- Click 'Configure' again
+- Click 'Generate'
+- Click 'Open Project'
+- In Visual Studio, select 'Release' in the toolbar
+- Compile by pressing 'F7'
+- In the project view, select INSTALL, open the context menu with the right
+  mouse button and select create
 
 License
 -------
