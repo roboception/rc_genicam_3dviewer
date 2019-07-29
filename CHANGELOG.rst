@@ -1,3 +1,9 @@
+1.0.5 (2019-07-29)
+------------------
+
+- Fixes for compiling under Windows with new rc_genicam_api
+- Added build instructions for Windows in README
+
 1.0.4 (2019-06-19)
 ------------------
 
