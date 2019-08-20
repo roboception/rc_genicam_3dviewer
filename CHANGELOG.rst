@@ -1,3 +1,8 @@
+1.0.6 (2019-08-20)
+------------------
+
+* Ensure that depth acquisition is set to continuous
+
 1.0.5 (2019-07-29)
 ------------------
 
