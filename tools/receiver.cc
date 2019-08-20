@@ -168,6 +168,10 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
 
   rcg::setString(nodemap, "AcquisitionMultiPartMode", "SingleComponent");
 
+  // set depth acquisition mode to continuous
+
+  rcg::setString(nodemap, "DepthAcquisitionMode", "Continuous");
+
   // start background thread for streaming images
 
   running=true;
