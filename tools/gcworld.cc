@@ -37,6 +37,7 @@
 
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include <vector>
 
 namespace rcgv
@@ -45,11 +46,24 @@ namespace rcgv
 GCWorld::GCWorld(int w, int h, const std::shared_ptr<Receiver> &_receiver) : GLWorld(w, h)
 {
   selected=0;
+  show_info=false;
   receiver=_receiver;
 }
 
 GCWorld::~GCWorld()
 { }
+
+void GCWorld::setFramerate(double _fps)
+{
+  fps=_fps;
+
+  if (show_info)
+  {
+    std::ostringstream out;
+    out << "Framerate: " << std::setprecision(3) << fps << " Hz";
+    setInfoLine(out.str().c_str());
+  }
+}
 
 namespace
 {
@@ -154,6 +168,14 @@ std::string paramBoolean2String(const std::shared_ptr<Receiver> &receiver, const
 
 void GCWorld::onSpecialKey(int key, int x, int y)
 {
+  // disable showing framerate
+
+  if (show_info)
+  {
+    show_info=false;
+    setInfoLine("");
+  }
+
   // change selection on cursor up or down
 
   if (key == GLUT_KEY_UP)
@@ -264,6 +286,36 @@ void GCWorld::onSpecialKey(int key, int x, int y)
       }
       break;
   }
+}
+
+void GCWorld::onKey(unsigned char key, int x, int y)
+{
+  if (key == 'i')
+  {
+    show_info=true;
+
+    std::ostringstream out;
+    out << "Framerate: " << std::setprecision(3) << fps << " Hz";
+    setInfoLine(out.str().c_str());
+
+    gvr::GLRedisplay();
+  }
+  else
+  {
+    if (show_info)
+    {
+      show_info=false;
+      setInfoLine("");
+    }
+
+    GLWorld::onKey(key, x, y);
+  }
+}
+
+void GCWorld::onMouseButton(int button, int state, int x, int y)
+{
+  show_info=false;
+  GLWorld::onMouseButton(button, state, x, y);
 }
 
 }

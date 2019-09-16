@@ -55,11 +55,17 @@ class GCWorld: public gvr::GLWorld
     GCWorld(int w, int h, const std::shared_ptr<Receiver> &receiver);
     virtual ~GCWorld();
 
+    void setFramerate(double fps);
+
     virtual void onSpecialKey(int key, int x, int y);
+    virtual void onKey(unsigned char key, int x, int y);
+    virtual void onMouseButton(int button, int state, int x, int y);
 
   private:
 
     int selected;
+    bool show_info;
+    double fps;
     std::shared_ptr<Receiver> receiver;
 };
 

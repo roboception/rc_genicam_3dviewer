@@ -42,6 +42,7 @@
 #include <gvr/model.h>
 #include <gvr/glmain.h>
 #include <gvr/glworld.h>
+#include <gutil/proctime.h>
 
 #ifdef WIN32
 #undef min
@@ -78,15 +79,41 @@ int id=0;
 
 void getNextModel(int)
 {
+  static double tprev=0;
+  static int n=0;
+
   std::shared_ptr<gvr::Model> model=modeler->nextModel();
 
   if (model)
   {
+    // set model and remove old one
+
     int nextid=(id+1)%2;
     model->setID(1000+nextid);
     world->addModel(*model.get());
     world->removeAllModels(1000+id);
     id=nextid;
+
+    // measure framerate
+
+    n++;
+    double tcurr=gutil::ProcTime::monotonic();
+
+    if (tprev == 0)
+    {
+      tprev=tcurr;
+      n=0;
+    }
+
+    if (tcurr-tprev > 2)
+    {
+      world->setFramerate(n/(tcurr-tprev));
+      tprev=tcurr;
+      n=0;
+    }
+
+    // redisplay
+
     gvr::GLRedisplay();
   }
 
