@@ -34,6 +34,7 @@
  */
 
 #include "receiver.h"
+#include "selectionwindow.h"
 
 #include <rc_genicam_api/system.h>
 #include <rc_genicam_api/interface.h>
@@ -49,9 +50,60 @@
 #include <gutil/exception.h>
 
 #include <vector>
+#include <sstream>
 
 namespace rcgv
 {
+
+namespace
+{
+
+std::vector<std::shared_ptr<rcg::Device> > getDevices(std::vector<std::string> &label)
+{
+  std::vector<std::shared_ptr<rcg::Device> > ret;
+
+  std::vector<std::shared_ptr<rcg::System> > system=rcg::System::getSystems();
+
+  for (size_t i=0; i<system.size(); i++)
+  {
+    system[i]->open();
+
+    std::vector<std::shared_ptr<rcg::Interface> > interf=system[i]->getInterfaces();
+
+    for (size_t k=0; k<interf.size(); k++)
+    {
+      interf[k]->open();
+
+      std::vector<std::shared_ptr<rcg::Device> > device=interf[k]->getDevices();
+
+      for (size_t j=0; j<device.size(); j++)
+      {
+        std::ostringstream out;
+
+        out << device[j]->getDisplayName() << " ";
+
+        std::string itf=device[j]->getParent()->getID();
+        if (itf.size() > 20)
+        {
+          itf=itf.substr(0, 20);
+        }
+
+        out << "(" << itf << ":" << device[j]->getSerialNumber() << ")";
+
+        label.push_back(out.str());
+        ret.push_back(device[j]);
+      }
+
+      interf[k]->close();
+    }
+
+    system[i]->close();
+  }
+
+  return ret;
+}
+
+}
 
 Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
 {
@@ -72,7 +124,8 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
   }
   else
   {
-    std::vector<std::shared_ptr<rcg::Device> > list=rcg::getDevices();
+    std::vector<std::string> label;
+    std::vector<std::shared_ptr<rcg::Device> > list=getDevices(label);
 
     if (list.size() == 1)
     {
@@ -84,7 +137,18 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
     }
     else
     {
-      throw gutil::IOException(std::string("Too many devices. Please specify which one to use."));
+      SelectionWindow sel(label);
+
+      int i=sel.getSelection();
+
+      if (i >= 0)
+      {
+        dev=list[i];
+      }
+      else
+      {
+        throw gutil::IOException(std::string("No device selected"));
+      }
     }
   }
 
