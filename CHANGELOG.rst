@@ -1,3 +1,8 @@
+1.1.0 (2019-12-03)
+------------------
+
+* Added simple dialog for choosing sensor if more than one is available
+
 1.0.7 (2019-10-07)
 ------------------
 
