@@ -78,20 +78,39 @@ std::vector<std::shared_ptr<rcg::Device> > getDevices(std::vector<std::string> &
 
       for (size_t j=0; j<device.size(); j++)
       {
+        // create label
+
         std::ostringstream out;
 
-        out << device[j]->getDisplayName() << " ";
+        std::string s=device[j]->getDisplayName();
 
-        std::string itf=device[j]->getParent()->getID();
-        if (itf.size() > 20)
+        out << s;
+        for (size_t i=s.size(); i<=16; i++)
         {
-          itf=itf.substr(0, 20);
+          out << ' ';
         }
 
-        out << "(" << itf << ":" << device[j]->getSerialNumber() << ")";
+        s=device[j]->getParent()->getID();
+        if (s.size() > 20)
+        {
+          s=s.substr(0, 20);
+        }
 
-        label.push_back(out.str());
-        ret.push_back(device[j]);
+        out << s << ":";
+
+        s=device[j]->getSerialNumber();
+        out << s;
+
+        // insert sorted by serial number
+
+        size_t i=0;
+        while (i < ret.size() && s.compare(ret[i]->getSerialNumber()) >= 0)
+        {
+          i++;
+        }
+
+        label.insert(label.begin()+i, out.str());
+        ret.insert(ret.begin()+i, device[j]);
       }
 
       interf[k]->close();

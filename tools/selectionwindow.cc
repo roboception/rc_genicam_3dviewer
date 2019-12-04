@@ -68,6 +68,11 @@ SelectionWindow::SelectionWindow(const std::vector<std::string> &list) :
 
   setInfoText(out.str().c_str());
   setVisible(true);
+
+  int w, h;
+  getDisplaySize(w, h);
+  setPosition((w-400)/2, (h-400)/2);
+
   waitForClose();
 }
 
