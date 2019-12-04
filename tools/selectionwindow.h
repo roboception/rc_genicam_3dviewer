@@ -54,6 +54,7 @@ class SelectionWindow: public bgui::BaseWindow
 
     SelectionWindow(const std::vector<std::string> &list);
 
+    virtual void onResize(int w, int h);
     virtual void onKey(char c, SpecialKey key, int x, int y);
 
     int getSelection();

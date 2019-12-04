@@ -41,7 +41,7 @@ namespace rcgv
 {
 
 SelectionWindow::SelectionWindow(const std::vector<std::string> &list) :
-  BaseWindow("Please select ...", 400, 400)
+  BaseWindow("Please select ...", 480, 320)
 {
   n=static_cast<int>(list.size());
   n=std::min(30, n);
@@ -71,9 +71,14 @@ SelectionWindow::SelectionWindow(const std::vector<std::string> &list) :
 
   int w, h;
   getDisplaySize(w, h);
-  setPosition((w-400)/2, (h-400)/2);
+  setPosition((w-480)/2, (h-400)/2);
 
   waitForClose();
+}
+
+void SelectionWindow::onResize(int w, int h)
+{
+  showBuffer();
 }
 
 void SelectionWindow::onKey(char c, SpecialKey key, int x, int y)

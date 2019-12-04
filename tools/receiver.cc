@@ -85,7 +85,7 @@ std::vector<std::shared_ptr<rcg::Device> > getDevices(std::vector<std::string> &
         std::string s=device[j]->getDisplayName();
 
         out << s;
-        for (size_t i=s.size(); i<=16; i++)
+        for (size_t l=s.size(); l<=16; l++)
         {
           out << ' ';
         }
@@ -103,14 +103,14 @@ std::vector<std::shared_ptr<rcg::Device> > getDevices(std::vector<std::string> &
 
         // insert sorted by serial number
 
-        size_t i=0;
-        while (i < ret.size() && s.compare(ret[i]->getSerialNumber()) >= 0)
+        size_t l=0;
+        while (l < ret.size() && s.compare(ret[l]->getSerialNumber()) >= 0)
         {
-          i++;
+          l++;
         }
 
-        label.insert(label.begin()+i, out.str());
-        ret.insert(ret.begin()+i, device[j]);
+        label.insert(label.begin()+l, out.str());
+        ret.insert(ret.begin()+l, device[j]);
       }
 
       interf[k]->close();
