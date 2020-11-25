@@ -396,7 +396,7 @@ void Receiver::run()
 
       // prepare buffers for time synchronization of images
 
-      rcg::ImageList left_list(75);
+      rcg::ImageList left_list(100);
       rcg::ImageList disp_list(25);
 
       int async=0, maxasync=100; // maximum number of asynchroneous images before giving up

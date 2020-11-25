@@ -119,7 +119,8 @@ void getNextModel(int)
 
   if (!receiver->isRunning())
   {
-    exit(0);
+    gvr::GLLeaveMainLoop();
+    return;
   }
 
   gvr::GLTimerFunc(40, getNextModel, 0);
