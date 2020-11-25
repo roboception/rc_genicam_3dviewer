@@ -1,5 +1,6 @@
 before_script:
   - export DISTRO_CODENAME=`lsb_release -cs` && echo Using distro $DISTRO_CODENAME
+  - export DEBIAN_FRONTEND=noninteractive
   - echo "deb http://apt.roboception.de/stable $DISTRO_CODENAME main" > /etc/apt/sources.list.d/roboception-stable.list
   - if [ "$TESTING_DEBS" = "true" ]; then echo "deb http://apt.roboception.de/testing $DISTRO_CODENAME main" > /etc/apt/sources.list.d/roboception-testing.list ; fi
   - curl http://apt.roboception.de/archive.key | apt-key add -
@@ -17,14 +18,14 @@ variables:
     - amd64
     - docker
 
-.armhf_xenial_t: &armhf_xenial_job
-  image: registry.roboception.de/tools/docker_images:armhf-xenial-buildimage
-  tags:
-    - armhf
-    - docker
-
 .amd64_bionic_t: &amd64_bionic_job
   image: registry.roboception.de/tools/docker_images:bionic-buildimage
+  tags:
+    - amd64
+    - docker
+
+.amd64_focal_t: &amd64_focal_job
+  image: registry.roboception.de/tools/docker_images:focal-buildimage
   tags:
     - amd64
     - docker
@@ -76,6 +77,8 @@ variables:
   extends: .package
   only:
     - master
+  except:
+    - tags
   variables:
     TESTING_DEBS: "true"
     APT_REPO: "testing"
@@ -119,12 +122,12 @@ test:xenial:amd64:
   <<: *amd64_xenial_job
   extends: .test_latest
 
-test:xenial:armhf:
-  <<: *armhf_xenial_job
-  extends: .test_latest
-
 test:bionic:amd64:
   <<: *amd64_bionic_job
+  extends: .test_latest
+
+test:focal:amd64:
+  <<: *amd64_focal_job
   extends: .test_latest
 
 # Test against stable (is allowed to fail)
@@ -133,12 +136,12 @@ test_stable:xenial:amd64:
   <<: *amd64_xenial_job
   extends: .test_stable
 
-test_stable:xenial:armhf:
-  <<: *armhf_xenial_job
-  extends: .test_stable
-
 test_stable:bionic:amd64:
   <<: *amd64_bionic_job
+  extends: .test_stable
+
+test_stable:focal:amd64:
+  <<: *amd64_focal_job
   extends: .test_stable
 
 # Deploy testing (only on master)
@@ -147,12 +150,12 @@ package_testing:xenial:amd64:
   <<: *amd64_xenial_job
   extends: .package_testing
 
-package_testing:xenial:armhf:
-  <<: *armhf_xenial_job
-  extends: .package_testing
-
 package_testing:bionic:amd64:
   <<: *amd64_bionic_job
+  extends: .package_testing
+
+package_testing:focal:amd64:
+  <<: *amd64_focal_job
   extends: .package_testing
 
 ################
@@ -165,12 +168,12 @@ test_release:xenial:amd64:
   <<: *amd64_xenial_job
   extends: .test_release
 
-test_release:xenial:armhf:
-  <<: *armhf_xenial_job
-  extends: .test_release
-
 test_release:bionic:amd64:
   <<: *amd64_bionic_job
+  extends: .test_release
+
+test_release:focal:amd64:
+  <<: *amd64_focal_job
   extends: .test_release
 
 # Deploy stable (only for releases, version tags)
@@ -179,10 +182,10 @@ package_stable:xenial:amd64:
   <<: *amd64_xenial_job
   extends: .package_stable
 
-package_stable:xenial:armhf:
-  <<: *armhf_xenial_job
-  extends: .package_stable
-
 package_stable:bionic:amd64:
   <<: *amd64_bionic_job
+  extends: .package_stable
+
+package_stable:focal:amd64:
+  <<: *amd64_focal_job
   extends: .package_stable
