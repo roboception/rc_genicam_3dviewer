@@ -90,7 +90,7 @@ void getNextModel(int)
 
     int nextid=(id+1)%2;
     model->setID(1000+nextid);
-    world->addModel(*model.get());
+    world->addModel(model);
     world->removeAllModels(1000+id);
     id=nextid;
 

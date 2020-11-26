@@ -48,10 +48,21 @@ GCWorld::GCWorld(int w, int h, const std::shared_ptr<Receiver> &_receiver) : GLW
   selected=0;
   show_info=false;
   receiver=_receiver;
+  sem_model.increment();
 }
 
 GCWorld::~GCWorld()
 { }
+
+void GCWorld::addModel(const std::shared_ptr<gvr::Model> &model)
+{
+  {
+    gutil::Lock lock(sem_model);
+    current_model=model;
+  }
+
+  GLWorld::addModel(*model.get());
+}
 
 void GCWorld::setFramerate(double _fps)
 {
@@ -290,7 +301,64 @@ void GCWorld::onSpecialKey(int key, int x, int y)
 
 void GCWorld::onKey(unsigned char key, int x, int y)
 {
-  if (key == 'i')
+  if (key == 'c')
+  {
+    gutil::Lock lock(sem_model);
+
+    if (current_model)
+    {
+      // get home directory
+
+      std::string prefix;
+
+      {
+#ifdef WIN32
+        const char *d=getenv("HomeDrive");
+        const char *p=getenv("HomePath");
+
+        if (d && p) prefix=std::string(d)+std::string(p)+"\\capture";
+#else
+        const char *p=getenv("HOME");
+        if (p) prefix=std::string(p)+"/capture";
+#endif
+      }
+
+      // determine name of file
+
+      int c=0;
+      std::string name;
+
+      while (name.size() == 0 && c < 1000)
+      {
+        std::ostringstream out;
+        out << prefix << "_" << std::setw(4) << std::setfill('0') << c++ << ".ply";
+
+        std::ifstream file(out.str().c_str());
+        if (!file.is_open())
+        {
+          name=out.str();
+        }
+
+        file.close();
+      }
+
+      try
+      {
+        // save PLY
+
+        current_model->savePLY(name.c_str());
+
+        // inform user that file has been saved
+
+        setInfoLine(("Saved as "+name).c_str());
+      }
+      catch (const std::exception &ex)
+      {
+        setInfoLine(("Cannot store file "+name).c_str());
+      }
+    }
+  }
+  else if (key == 'i')
   {
     show_info=true;
 

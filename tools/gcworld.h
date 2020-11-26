@@ -36,6 +36,7 @@
 #ifndef RC_GENICAM_VIEWER_GCWORLD
 #define RC_GENICAM_VIEWER_GCWORLD
 
+#include <gutil/semaphore.h>
 #include <gvr/glworld.h>
 #include "receiver.h"
 
@@ -55,6 +56,7 @@ class GCWorld: public gvr::GLWorld
     GCWorld(int w, int h, const std::shared_ptr<Receiver> &receiver);
     virtual ~GCWorld();
 
+    void addModel(const std::shared_ptr<gvr::Model> &model);
     void setFramerate(double fps);
 
     virtual void onSpecialKey(int key, int x, int y);
@@ -67,6 +69,9 @@ class GCWorld: public gvr::GLWorld
     bool show_info;
     double fps;
     std::shared_ptr<Receiver> receiver;
+
+    gutil::Semaphore sem_model;
+    std::shared_ptr<gvr::Model> current_model;
 };
 
 }
