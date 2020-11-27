@@ -1,3 +1,8 @@
+1.2.0 (2020-11-27)
+------------------
+
+* Added saving of point cloud in PLY format into the user home directory with 'c'
+
 1.1.1 (2020-11-25)
 ------------------
 
