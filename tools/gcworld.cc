@@ -87,7 +87,7 @@ int getIndex(const std::vector<std::string> &list, const std::string &value)
   {
     if (value == list[i])
     {
-      ret=i;
+      ret=static_cast<int>(i);
     }
   }
 
@@ -309,17 +309,15 @@ void GCWorld::onKey(unsigned char key, int x, int y)
     {
       // get home directory
 
-      std::string prefix;
+      std::string fileprefix;
 
       {
 #ifdef WIN32
-        const char *d=getenv("HomeDrive");
-        const char *p=getenv("HomePath");
-
-        if (d && p) prefix=std::string(d)+std::string(p)+"\\capture";
+        const char *p=getenv("USERPROFILE");
+        if (p) fileprefix=std::string(p)+"\\capture";
 #else
         const char *p=getenv("HOME");
-        if (p) prefix=std::string(p)+"/capture";
+        if (p) fileprefix=std::string(p)+"/capture";
 #endif
       }
 
@@ -331,7 +329,7 @@ void GCWorld::onKey(unsigned char key, int x, int y)
       while (name.size() == 0 && c < 1000)
       {
         std::ostringstream out;
-        out << prefix << "_" << std::setw(4) << std::setfill('0') << c++ << ".ply";
+        out << fileprefix << "_" << std::setw(4) << std::setfill('0') << c++ << ".ply";
 
         std::ifstream file(out.str().c_str());
         if (!file.is_open())
@@ -352,7 +350,7 @@ void GCWorld::onKey(unsigned char key, int x, int y)
 
         setInfoLine(("Saved as "+name).c_str());
       }
-      catch (const std::exception &ex)
+      catch (const std::exception &)
       {
         setInfoLine(("Cannot store file "+name).c_str());
       }
