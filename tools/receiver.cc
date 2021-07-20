@@ -224,6 +224,7 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
   // set to color format if available
 
   rcg::setEnum(nodemap, "PixelFormat", "YCbCr411_8", false);
+  rcg::setEnum(nodemap, "PixelFormat", "RGB8", false);
 
   // enable left image and disparity disparity
 

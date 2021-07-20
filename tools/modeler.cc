@@ -113,6 +113,26 @@ void getImage(gimage::ImageU8 &out, const std::shared_ptr<const rcg::Image> &in)
       ps+=px;
     }
   }
+  else if (in->getPixelFormat() == RGB8)
+  {
+    out.setSize(static_cast<long>(width), static_cast<long>(height), 3);
+
+    gutil::uint8 *rt=out.getPtr(0, 0, 0);
+    gutil::uint8 *gt=out.getPtr(0, 0, 1);
+    gutil::uint8 *bt=out.getPtr(0, 0, 2);
+
+    for (size_t k=0; k<height; k++)
+    {
+      for (size_t i=0; i<width; i++)
+      {
+        *rt++=*ps++;
+        *gt++=*ps++;
+        *bt++=*ps++;
+      }
+
+      ps+=px;
+    }
+  }
   else if (in->getPixelFormat() == YCbCr411_8)
   {
     out.setSize(static_cast<long>(width), static_cast<long>(height), 3);
