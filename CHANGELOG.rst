@@ -1,3 +1,9 @@
+1.3.0 (2021-10-01)
+------------------
+
+* Added possibility to specify GenICam parameters on the command line
+* Added support for RGB8 color format of new SGM producer
+
 1.2.0 (2020-11-27)
 ------------------
 
