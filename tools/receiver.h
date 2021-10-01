@@ -58,7 +58,8 @@ class Receiver: public gutil::ThreadFunction
 {
   public:
 
-    Receiver(std::shared_ptr<Modeler> modeler, const char *device);
+    Receiver(std::shared_ptr<Modeler> modeler, const char *device,
+      const std::vector<std::string> &genicam_param);
     ~Receiver();
 
     /**

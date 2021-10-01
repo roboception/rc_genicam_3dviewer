@@ -60,7 +60,7 @@ void printHelp(const char *prgname)
 {
   // show help
 
-  std::cout << prgname << " [[<interface-id>:]<device-id>]" << std::endl;
+  std::cout << prgname << " [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
   std::cout << std::endl;
   std::cout << "Requests synchronized intensity and disparity images, creates a colored mesh" << std::endl;
   std::cout << "and shows it in an OpenGL window." << std::endl;
@@ -148,15 +148,21 @@ int main(int argc, char *argv[])
     }
 
     const char *name=0;
+    std::vector<std::string> genicam_param;
     if (i < argc)
     {
       name=argv[i++];
+
+      while (i < argc)
+      {
+        genicam_param.push_back(std::string(argv[i++]));
+      }
     }
 
     // create modeler and receiver
 
     modeler=std::make_shared<rcgv::Modeler>();
-    receiver=std::make_shared<rcgv::Receiver>(modeler, name);
+    receiver=std::make_shared<rcgv::Receiver>(modeler, name, genicam_param);
     atexit(closeDevice);
 
     // create window

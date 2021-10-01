@@ -124,7 +124,8 @@ std::vector<std::shared_ptr<rcg::Device> > getDevices(std::vector<std::string> &
 
 }
 
-Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
+Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device,
+  const std::vector<std::string> &genicam_param)
 {
   sem_nodemap.increment();
 
@@ -173,6 +174,32 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device)
 
   dev->open(rcg::Device::CONTROL);
   nodemap=dev->getRemoteNodeMap();
+
+  // apply all given genicam parameters
+
+  for (size_t i=0; i<genicam_param.size(); i++)
+  {
+    // split argument in key and value
+
+    std::string key=genicam_param[i];
+    std::string value;
+
+    size_t k=key.find('=');
+    if (k != std::string::npos)
+    {
+      value=key.substr(k+1);
+      key=key.substr(0, k);
+    }
+
+    if (value.size() > 0)
+    {
+      rcg::setString(nodemap, key.c_str(), value.c_str(), true);
+    }
+    else
+    {
+      rcg::callCommand(nodemap, key.c_str(), true);
+    }
+  }
 
   // get chunk adapter (this switches chunk mode on if possible and
   // returns a null pointer if this is not possible)
