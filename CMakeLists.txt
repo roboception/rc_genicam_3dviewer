@@ -66,6 +66,7 @@ if (MSVC)
   add_definitions("/wd5026")
   add_definitions("/wd5027")
   add_definitions("/wd5039")
+  add_definitions("/wd5204")
 endif ()
 
 # - Build individual parts -

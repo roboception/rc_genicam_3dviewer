@@ -36,6 +36,7 @@ project(tools CXX)
 # build programs
 
 add_executable(gc_3dviewer gc_3dviewer.cc gcworld.cc modeler.cc receiver.cc selectionwindow.cc)
+
 target_link_libraries(gc_3dviewer rc_genicam_api::rc_genicam_api)
 target_link_libraries(gc_3dviewer ${CVKIT_GVR_LIBRARY})
 target_link_libraries(gc_3dviewer ${CVKIT_BGUI_LIBRARY})
