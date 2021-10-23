@@ -1,3 +1,8 @@
+1.3.1 (2021-10-23)
+------------------
+
+* Added build script for Windows and fixed some compile issues
+
 1.3.0 (2021-10-01)
 ------------------
 
