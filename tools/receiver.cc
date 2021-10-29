@@ -469,14 +469,11 @@ void Receiver::run()
 
                 if (component == "Intensity")
                 {
-// ???
-std::cout << "Added left image: " << buffer->getTimestampNS() << std::endl;
                   left_list.add(buffer, part);
                   disp_tol=tol;
                 }
                 else if (component == "Disparity")
                 {
-std::cout << "Added disparity image: " << buffer->getTimestampNS() << std::endl;
                   disp_list.add(buffer, part);
                   left_tol=tol;
                 }
