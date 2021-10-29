@@ -234,7 +234,7 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device,
 
     if (linesource == "ExposureAlternateActive")
     {
-      tol=50*1000*1000; // set tolerance to 50 ms
+      tol=250*1000*1000; // set tolerance to 250 ms
     }
   }
   catch (const std::exception &)
@@ -397,7 +397,7 @@ void Receiver::setEnum(const char *name, const std::string &value)
     {
       if (value == "ExposureAlternateActive")
       {
-        tol=50*1000*1000; // set tolerance to 50 ms
+        tol=250*1000*1000; // set maximum tolerance to 250 ms
       }
       else
       {
@@ -469,11 +469,14 @@ void Receiver::run()
 
                 if (component == "Intensity")
                 {
+// ???
+std::cout << "Added left image: " << buffer->getTimestampNS() << std::endl;
                   left_list.add(buffer, part);
                   disp_tol=tol;
                 }
                 else if (component == "Disparity")
                 {
+std::cout << "Added disparity image: " << buffer->getTimestampNS() << std::endl;
                   disp_list.add(buffer, part);
                   left_tol=tol;
                 }

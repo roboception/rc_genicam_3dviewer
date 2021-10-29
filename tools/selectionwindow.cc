@@ -41,7 +41,7 @@ namespace rcgv
 {
 
 SelectionWindow::SelectionWindow(const std::vector<std::string> &list) :
-  BaseWindow("Please select ...", 480, 320)
+  BaseWindow("Please select ...", 640, 480)
 {
   n=static_cast<int>(list.size());
   n=std::min(30, n);
