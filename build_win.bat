@@ -94,7 +94,7 @@ if exist "build_rc_genicam_3dviewer\" (
 nmake install
 if %ERRORLEVEL% NEQ 0 exit /b 1
 
-cp "%INSTALL_PATH%\include\GL\freeglut.h" "%INSTALL_PATH%\include\GL\glut.h"
+copy "%INSTALL_PATH%\include\GL\freeglut.h" "%INSTALL_PATH%\include\GL\glut.h"
 set OPT_GLUT=-DGLUT_INCLUDE_DIR="%INSTALL_PATH%\include" -DGLUT_glut_LIBRARY_RELEASE="%INSTALL_PATH%\lib\freeglut.lib"
 
 cd ..\..\..\..\..
