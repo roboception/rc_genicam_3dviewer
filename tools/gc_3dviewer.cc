@@ -62,7 +62,7 @@ void printHelp(const char *prgname)
 {
   // show help
 
-  std::cout << prgname << " [-bg <red>,<green>,<blue>] [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
+  std::cout << prgname << " [-h] [-bg <red>,<green>,<blue>] [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
   std::cout << std::endl;
   std::cout << "Requests synchronized intensity and disparity images, creates a colored mesh" << std::endl;
   std::cout << "and shows it in an OpenGL window." << std::endl;
