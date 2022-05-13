@@ -1,3 +1,10 @@
+1.3.2 (2022-05-13)
+------------------
+
+* Revised help text
+* Added command line parameter for choosing different background color
+* Increased maximum time between images with and without projection to 250 ms
+
 1.3.1 (2021-10-23)
 ------------------
 
