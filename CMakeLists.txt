@@ -106,6 +106,6 @@ add_subdirectory(doc)
 #set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Your Name <your.name@roboception.de>")
 
 # optionally specify dependencies of the debian package here (comma separated!)
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "cvkit (>= 2.2.1), rc-genicam-api (>= 2.0.3) | ros-$ENV{ROS_DISTRO}-rc-genicam-api (>= 2.0.3)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "cvkit (>= 2.3.6), rc-genicam-api (>= 2.5.12)")
 
 include(cmake/package_debian.cmake)

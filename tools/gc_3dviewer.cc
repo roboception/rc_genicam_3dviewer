@@ -43,6 +43,8 @@
 #include <gvr/glmain.h>
 #include <gvr/glworld.h>
 #include <gutil/proctime.h>
+#include <gutil/misc.h>
+#include <gutil/exception.h>
 
 #ifdef WIN32
 #undef min
@@ -60,7 +62,7 @@ void printHelp(const char *prgname)
 {
   // show help
 
-  std::cout << prgname << " [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
+  std::cout << prgname << " [-bg <red>,<green>,<blue>] [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
   std::cout << std::endl;
   std::cout << "Requests synchronized intensity and disparity images, creates a colored mesh" << std::endl;
   std::cout << "and shows it in an OpenGL window." << std::endl;
@@ -147,6 +149,13 @@ int main(int argc, char *argv[])
       return 0;
     }
 
+    std::string bg;
+    if (i+1 < argc && std::string(argv[i]) == "-bg")
+    {
+      i++;
+      bg=argv[i++];
+    }
+
     const char *name=0;
     std::vector<std::string> genicam_param;
     if (i < argc)
@@ -170,6 +179,26 @@ int main(int argc, char *argv[])
     gvr::GLInitWindow(-1, -1, 800, 600, "gc_3dviewer");
     world=std::make_shared<rcgv::GCWorld>(800, 600, receiver);
     world->setCapturePrefix("capture");
+
+    // set background color
+
+    if (bg.size() > 0)
+    {
+      std::vector<std::string> list;
+
+      gutil::split(list, bg, ',');
+
+      if (list.size() != 3)
+      {
+        throw gutil::InvalidArgumentException(std::string("Illegal format: ")+bg);
+      }
+
+      float r=std::max(0.0f, std::min(1.0f, std::stoi(list[0])/255.0f));
+      float g=std::max(0.0f, std::min(1.0f, std::stoi(list[1])/255.0f));
+      float b=std::max(0.0f, std::min(1.0f, std::stoi(list[2])/255.0f));
+
+      world->setBackgroundColor(r, g, b);
+    }
 
     // register additional timer callback
 
