@@ -62,7 +62,7 @@ void printHelp(const char *prgname)
 {
   // show help
 
-  std::cout << prgname << " [-h] [-bg <red>,<green>,<blue>] [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
+  std::cout << prgname << " [-h] [-bg <red>,<green>,<blue>] [-key <keycodes>] [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
   std::cout << std::endl;
   std::cout << "Requests synchronized intensity and disparity images, creates a colored mesh" << std::endl;
   std::cout << "and shows it in an OpenGL window." << std::endl;
@@ -142,18 +142,31 @@ int main(int argc, char *argv[])
     gvr::GLInit(argc, argv);
 
     int i=1;
-
-    if (i < argc && std::string(argv[i]) == "-h")
-    {
-      printHelp(argv[0]);
-      return 0;
-    }
-
     std::string bg;
-    if (i+1 < argc && std::string(argv[i]) == "-bg")
+    std::string keycodes;
+
+    while (i < argc && argv[i][0] == '-')
     {
-      i++;
-      bg=argv[i++];
+      if (i < argc && std::string(argv[i]) == "-h")
+      {
+        printHelp(argv[0]);
+        return 0;
+      }
+      else if (i+1 < argc && std::string(argv[i]) == "-bg")
+      {
+        i++;
+        bg=argv[i++];
+      }
+      else if (i+1 < argc && std::string(argv[i]) == "-key")
+      {
+        i++;
+        keycodes=argv[i++];
+      }
+      else
+      {
+        gutil::showError((std::string("Unknown parameter or missing value: ")+argv[i]).c_str());
+        return 1;
+      }
     }
 
     const char *name=0;
@@ -198,6 +211,13 @@ int main(int argc, char *argv[])
       float b=std::max(0.0f, std::min(1.0f, std::stoi(list[2])/255.0f));
 
       world->setBackgroundColor(r, g, b);
+    }
+
+    // apply keycodes
+
+    for (size_t k=0; k<keycodes.size(); k++)
+    {
+      world->onKey(keycodes[k], 0, 0);
     }
 
     // register additional timer callback
