@@ -49,6 +49,10 @@ GCWorld::GCWorld(int w, int h, const std::shared_ptr<Receiver> &_receiver) : GLW
   show_info=false;
   receiver=_receiver;
   sem_model.increment();
+
+  toggle_texture_on_double_click=false;
+  mx=-2;
+  my=-2;
 }
 
 GCWorld::~GCWorld()
@@ -366,6 +370,10 @@ void GCWorld::onKey(unsigned char key, int x, int y)
 
     gvr::GLRedisplay();
   }
+  else if (key == 'T')
+  {
+    toggle_texture_on_double_click=!toggle_texture_on_double_click;
+  }
   else
   {
     if (show_info)
@@ -381,6 +389,25 @@ void GCWorld::onKey(unsigned char key, int x, int y)
 void GCWorld::onMouseButton(int button, int state, int x, int y)
 {
   show_info=false;
+
+  if (toggle_texture_on_double_click && state == GLUT_DOWN && button == GLUT_LEFT_BUTTON)
+  {
+    mt.stop();
+
+    if (mt.elapsed() < 0.5 && std::abs(static_cast<double>(x-mx)) <= 1 &&
+      std::abs(static_cast<double>(y-my)) <= 1)
+    {
+      onKey('t', x, y);
+      return;
+    }
+
+    mt.clear();
+    mt.start();
+
+    mx=x;
+    my=y;
+  }
+
   GLWorld::onMouseButton(button, state, x, y);
 }
 

@@ -37,6 +37,7 @@
 #define RC_GENICAM_VIEWER_GCWORLD
 
 #include <gutil/semaphore.h>
+#include <gutil/proctime.h>
 #include <gvr/glworld.h>
 #include "receiver.h"
 
@@ -69,6 +70,10 @@ class GCWorld: public gvr::GLWorld
     bool show_info;
     double fps;
     std::shared_ptr<Receiver> receiver;
+
+    bool toggle_texture_on_double_click;
+    gutil::ProcTime mt;
+    int mx, my;
 
     gutil::Semaphore sem_model;
     std::shared_ptr<gvr::Model> current_model;
