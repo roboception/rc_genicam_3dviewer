@@ -1,3 +1,9 @@
+1.3.3 (2022-05-20)
+------------------
+
+* Added command line parameter for applying key codes on startup
+* Added key 'T' for using double click to toggle between textured and untextured
+
 1.3.2 (2022-05-13)
 ------------------
 
