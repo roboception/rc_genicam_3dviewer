@@ -532,6 +532,13 @@ void Receiver::run()
             std::cerr << "Incomplete buffer received!" << std::endl;
           }
         }
+        else
+        {
+          // check if connection is still there
+
+          rcg::setEnum(nodemap, "LineSelector", "Out1", true);
+          rcg::getString(nodemap, "LineSource", true, true);
+        }
       }
 
       // report if synchronization failed
