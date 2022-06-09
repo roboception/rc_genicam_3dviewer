@@ -1,3 +1,10 @@
+1.4.0 (2022-06-09)
+------------------
+
+* Added option to specify timeout until giving up
+* Added if connection is still valid if no images are received
+* Updating out1 mode from chunk data
+
 1.3.3 (2022-05-20)
 ------------------
 
