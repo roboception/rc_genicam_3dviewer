@@ -47,6 +47,7 @@
 
 #include <Base/GCException.h>
 
+#include <gutil/proctime.h>
 #include <gutil/exception.h>
 
 #include <vector>
@@ -125,11 +126,13 @@ std::vector<std::shared_ptr<rcg::Device> > getDevices(std::vector<std::string> &
 }
 
 Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device,
-  const std::vector<std::string> &genicam_param)
+  double _timeout, const std::vector<std::string> &genicam_param)
 {
   sem_nodemap.increment();
 
   modeler=_modeler;
+
+  timeout=_timeout;
 
   // find specific device accross all systems and interfaces and open it
 
@@ -427,12 +430,10 @@ void Receiver::run()
       rcg::ImageList left_list(100);
       rcg::ImageList disp_list(25);
 
-      int async=0, maxasync=100; // maximum number of asynchroneous images before giving up
+      double last_grabbed=gutil::ProcTime::monotonic();
 
-      while (running && async < maxasync)
+      while (running && (timeout == 0 || last_grabbed+timeout > gutil::ProcTime::monotonic()))
       {
-        async++;
-
         // grab next image with timeout
 
         const rcg::Buffer *buffer=stream[0]->grab(500);
@@ -493,9 +494,10 @@ void Receiver::run()
                   // remove all images from the buffer with the current or an
                   // older time stamp
 
-                  async=0;
                   left_list.removeOld(timestamp);
                   disp_list.removeOld(timestamp);
+
+                  last_grabbed=gutil::ProcTime::monotonic();
                 }
               }
             }
@@ -513,7 +515,7 @@ void Receiver::run()
 
       // report if synchronization failed
 
-      if (async >= maxasync && running)
+      if (last_grabbed+timeout < gutil::ProcTime::monotonic())
       {
         std::cerr << "Cannot grab synchronized left and disparity image" << std::endl;
       }

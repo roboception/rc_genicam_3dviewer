@@ -59,7 +59,7 @@ class Receiver: public gutil::ThreadFunction
   public:
 
     Receiver(std::shared_ptr<Modeler> modeler, const char *device,
-      const std::vector<std::string> &genicam_param);
+      double timeout, const std::vector<std::string> &genicam_param);
     ~Receiver();
 
     /**
@@ -132,6 +132,7 @@ class Receiver: public gutil::ThreadFunction
     std::shared_ptr<GenApi::CNodeMapRef> nodemap;
     std::shared_ptr<GenApi::CChunkAdapter> chunkadapter;
 
+    double timeout;
     double f, t, scale, offset;
     double inv;
     uint64_t tol;

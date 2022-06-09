@@ -62,7 +62,7 @@ void printHelp(const char *prgname)
 {
   // show help
 
-  std::cout << prgname << " [-h] [-bg <red>,<green>,<blue>] [-key <keycodes>] [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
+  std::cout << prgname << " <options> [[<interface-id>:]<device-id> [<key>=<value> ...]]" << std::endl;
   std::cout << std::endl;
   std::cout << "Requests synchronized intensity and disparity images, creates a colored mesh" << std::endl;
   std::cout << "and shows it in an OpenGL window." << std::endl;
@@ -70,8 +70,17 @@ void printHelp(const char *prgname)
   std::cout << "- Press 'h' for an overview of general key codes." << std::endl;
   std::cout << "- Use cursor keys to switch between some GenICam parameters and their values." << std::endl;
   std::cout << std::endl;
+  std::cout << "Command line options are:" << std::endl;
+  std::cout << "-h              Shows this help and exits." << std::endl;
+  std::cout << "-bg <r>,<g>,<b> Setting background color." << std::endl;
+  std::cout << "-key <codes>    Sends the given keycodes to the viewer on startup." << std::endl;
+  std::cout << "-timeout <t>    Timeout in seconds until giving up. 0 for inifinity." << std::endl;
+  std::cout << std::endl;
   std::cout << "<device-id> Device from which images will taken. It can be ommitted if there" << std::endl;
   std::cout << "is only one device available." << std::endl;
+  std::cout << std::endl;
+  std::cout << "Genicam parameters can be given as key value pairs. They will be applied to the" << std::endl;
+  std::cout << "device before streaming starts" << std::endl;
 }
 
 std::shared_ptr<rcgv::Modeler> modeler;
@@ -144,6 +153,7 @@ int main(int argc, char *argv[])
     int i=1;
     std::string bg;
     std::string keycodes;
+    double timeout=3;
 
     while (i < argc && argv[i][0] == '-')
     {
@@ -161,6 +171,11 @@ int main(int argc, char *argv[])
       {
         i++;
         keycodes=argv[i++];
+      }
+      else if (i+1 < argc && std::string(argv[i]) == "-timeout")
+      {
+        i++;
+        timeout=std::stod(argv[i++]);
       }
       else
       {
@@ -184,7 +199,7 @@ int main(int argc, char *argv[])
     // create modeler and receiver
 
     modeler=std::make_shared<rcgv::Modeler>();
-    receiver=std::make_shared<rcgv::Receiver>(modeler, name, genicam_param);
+    receiver=std::make_shared<rcgv::Receiver>(modeler, name, timeout, genicam_param);
     atexit(closeDevice);
 
     // create window
