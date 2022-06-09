@@ -42,6 +42,7 @@
 #include <rc_genicam_api/buffer.h>
 #include <rc_genicam_api/image.h>
 #include <rc_genicam_api/imagelist.h>
+#include <rc_genicam_api/config.h>
 
 #include <rc_genicam_api/pixel_formats.h>
 
@@ -461,6 +462,26 @@ void Receiver::run()
             {
               if (buffer->getImagePresent(part))
               {
+                // get current out1 mode from chunk data (allowed to fail to support
+                // rc_visard / rc_cube < 22.07.0)
+
+                uint64_t ltol=tol;
+
+                rcg::setEnum(nodemap, "ChunkLineSelector", "Out1", false);
+                std::string out1_mode=rcg::getEnum(nodemap, "ChunkLineSource", false);
+
+                if (out1_mode.size() > 0)
+                {
+                  if (out1_mode == "ExposureAlternateActive")
+                  {
+                    ltol=250*1000*1000; // set maximum tolerance to 250 ms
+                  }
+                  else
+                  {
+                    ltol=0;
+                  }
+                }
+
                 // store image in the corresponding list
 
                 uint64_t left_tol=0;
@@ -471,12 +492,12 @@ void Receiver::run()
                 if (component == "Intensity")
                 {
                   left_list.add(buffer, part);
-                  disp_tol=tol;
+                  disp_tol=ltol;
                 }
                 else if (component == "Disparity")
                 {
                   disp_list.add(buffer, part);
-                  left_tol=tol;
+                  left_tol=ltol;
                 }
 
                 // get corresponding left and disparity images
