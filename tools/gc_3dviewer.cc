@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     gvr::GLInit(argc, argv);
 
     int i=1;
-    std::string bg;
+    std::string bg="44,51,58";
     std::string keycodes;
     double timeout=3;
 

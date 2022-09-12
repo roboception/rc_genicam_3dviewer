@@ -179,6 +179,8 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device,
   dev->open(rcg::Device::CONTROL);
   nodemap=dev->getRemoteNodeMap();
 
+  rcg::setBoolean(nodemap, "ChunkModeActive", true);
+
   // apply all given genicam parameters
 
   for (size_t i=0; i<genicam_param.size(); i++)
@@ -204,11 +206,6 @@ Receiver::Receiver(std::shared_ptr<Modeler> _modeler, const char *device,
       rcg::callCommand(nodemap, key.c_str(), true);
     }
   }
-
-  // get chunk adapter (this switches chunk mode on if possible and
-  // returns a null pointer if this is not possible)
-
-  chunkadapter=rcg::getChunkAdapter(nodemap, dev->getTLType());
 
   // get focal length, baseline and disparity scale factor
 
@@ -317,7 +314,6 @@ void Receiver::close()
 
   modeler.reset();
   dev.reset();
-  chunkadapter.reset();
   nodemap.reset();
 
   // clear systems
@@ -424,7 +420,10 @@ void Receiver::run()
       // opening first stream
 
       stream[0]->open();
+      stream[0]->attachBuffers(true);
       stream[0]->startStreaming();
+
+      std::cout << "Package size: " << rcg::getString(nodemap, "GevSCPSPacketSize") << std::endl;
 
       // prepare buffers for time synchronization of images
 
@@ -444,16 +443,8 @@ void Receiver::run()
 
           if (!buffer->getIsIncomplete())
           {
+
             gutil::Lock lock(sem_nodemap);
-
-            // attach buffer to nodemap for accessing chunk data if possible
-
-            if (chunkadapter)
-            {
-              chunkadapter->AttachBuffer(
-                reinterpret_cast<std::uint8_t *>(buffer->getGlobalBase()),
-                                                 static_cast<int64_t>(buffer->getSizeFilled()));
-            }
 
             // go through all parts in case of multi-part buffer
 
@@ -522,10 +513,6 @@ void Receiver::run()
                 }
               }
             }
-
-            // detach buffer from nodemap
-
-            if (chunkadapter) chunkadapter->DetachBuffer();
           }
           else
           {

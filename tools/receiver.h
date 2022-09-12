@@ -130,7 +130,6 @@ class Receiver: public gutil::ThreadFunction
 
     std::shared_ptr<rcg::Device> dev;
     std::shared_ptr<GenApi::CNodeMapRef> nodemap;
-    std::shared_ptr<GenApi::CChunkAdapter> chunkadapter;
 
     double timeout;
     double f, t, scale, offset;
