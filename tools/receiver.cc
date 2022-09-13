@@ -423,14 +423,14 @@ void Receiver::run()
       stream[0]->attachBuffers(true);
       stream[0]->startStreaming();
 
-      std::cout << "Package size: " << rcg::getString(nodemap, "GevSCPSPacketSize") << std::endl;
-
       // prepare buffers for time synchronization of images
 
       rcg::ImageList left_list(100);
       rcg::ImageList disp_list(25);
 
       double last_grabbed=gutil::ProcTime::monotonic();
+      double last_heartbeat=last_grabbed;
+      double heartbeat_timeout=rcg::getInteger(nodemap, "GevHeartbeatTimeout", 0, 0, false)/2000.0;
 
       while (running && (timeout == 0 || last_grabbed+timeout > gutil::ProcTime::monotonic()))
       {
@@ -439,11 +439,21 @@ void Receiver::run()
         const rcg::Buffer *buffer=stream[0]->grab(500);
         if (buffer != 0)
         {
+          // ensure heartbeat for GEV devices
+
+          if (heartbeat_timeout > 0 && last_heartbeat+heartbeat_timeout < gutil::ProcTime::monotonic())
+          {
+            gutil::Lock lock(sem_nodemap);
+            rcg::setEnum(nodemap, "LineSelector", "Out1", true);
+            rcg::getString(nodemap, "LineSource", true, true);
+
+            last_heartbeat=gutil::ProcTime::monotonic();
+          }
+
           // check for a complete image in the buffer
 
           if (!buffer->getIsIncomplete())
           {
-
             gutil::Lock lock(sem_nodemap);
 
             // go through all parts in case of multi-part buffer
@@ -521,6 +531,8 @@ void Receiver::run()
         }
         else
         {
+          gutil::Lock lock(sem_nodemap);
+
           // check if connection is still there
 
           rcg::setEnum(nodemap, "LineSelector", "Out1", true);
