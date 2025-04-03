@@ -1,3 +1,10 @@
+**NOTE:** Work on this package is discontinued. Customers of Roboception GmbH can
+download the SGM Producer package from [here](https://roboception.com/resources/knowledge-base/)
+and use the rc_viewer tool, either with the SGM Producer for off-board processing
+or with a GigE producer, e.g. from the rc_genicam_api package for processing
+depth images on-board the rc_visard. The rc_viewer offers more functionality and
+a proper GUI in contrast to the gc_3dviewer.
+
 Roboception GenICam 3D Viewer
 =============================
 
