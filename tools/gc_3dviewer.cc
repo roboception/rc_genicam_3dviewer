@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
       }
       else
       {
-        gutil::showError((std::string("Unknown parameter or missing value: ")+argv[i]).c_str());
+        std::cerr << "Unknown parameter or missing value: " << argv[i] << std::endl;
         return 1;
       }
     }
@@ -250,15 +250,15 @@ int main(int argc, char *argv[])
   }
   catch (const std::exception &ex)
   {
-    gutil::showError(ex.what());
+    std::cerr << ex.what() << std::endl;
   }
   catch (const GENICAM_NAMESPACE::GenericException &ex)
   {
-    gutil::showError(ex.what());
+    std::cerr << ex.what() << std::endl;
   }
   catch (...)
   {
-    gutil::showError("Unknown exception!");
+    std::cerr << "Unknown exception!" << std::endl;
   }
 
   rcg::System::clearSystems();

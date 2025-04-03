@@ -40,6 +40,8 @@
 #include <iomanip>
 #include <vector>
 
+#include <GL/glut.h>
+
 namespace rcgv
 {
 
