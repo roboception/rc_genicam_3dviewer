@@ -1,3 +1,9 @@
+1.4.3 (2025-04-03)
+------------------
+
+* Fixes for some changes in cvkit
+* Adding note to readme about discontinued development
+
 1.4.2 (2022-10-14)
 ------------------
 
